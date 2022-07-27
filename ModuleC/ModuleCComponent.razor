@@ -1,0 +1,24 @@
+﻿@page "/ModuleC/C1"
+@inject IJSRuntime _JsRuntime;
+
+<div class="my-component">
+    This component is defined in the <strong>ModuleC</strong> library.
+</div>
+<img src="./_content/ModuleC/R.png" width="200" height="200" />
+
+<br/>
+
+<input @bind-value="Input" />
+<button @onclick="Prompt">Prompt</button>
+<p>@Output</p>
+@code {
+    private string Input { get; set; } = string.Empty;
+    private string Output { get; set; } = string.Empty;
+
+    private async Task Prompt()
+    {
+        ExampleJsInterop js = new ExampleJsInterop(_JsRuntime);
+        Output = await js.Prompt(Input);
+        StateHasChanged();
+    }
+}

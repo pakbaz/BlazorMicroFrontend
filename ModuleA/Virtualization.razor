@@ -1,0 +1,49 @@
+﻿@page "/ModuleA/V1"
+@inject HttpClient Http
+@using System.Net.Http.Json
+
+<h3>Virtualization</h3>
+
+<table class="table table-striped">
+    <thead><tr><th>Image</th><th>Name</th><th>Location</th><th>Population</th></tr></thead>
+    <tbody>
+        <Virtualize Items="Monkeys" Context="m">
+            <ItemContent>
+                <tr>
+                    <td> <img class="img-fluid" src="@m.Image" width="200" /></td>
+                    <td> @m.Name </td>
+                    <td> @m.Location </td>
+                    <td> @m.Population</td>
+                </tr>
+            </ItemContent>
+            <Placeholder>
+                <tr>
+                    <td colspan="4">Loading...</td>
+                </tr>
+            </Placeholder>
+        </Virtualize>
+    </tbody>
+</table>
+
+@code {
+
+    List<Monkey> Monkeys = new();
+
+    protected override async Task OnInitializedAsync() =>
+        Monkeys = await Http.GetFromJsonAsync<List<Monkey>>("https://raw.githubusercontent.com/jamesmontemagno/app-monkeys/master/MonkeysApp/monkeydata.json");
+
+
+
+    private class Monkey
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Location { get; set; } = string.Empty;
+        public string Details { get; set; } = string.Empty;
+        public string Image { get; set; } = string.Empty;
+        public int Population { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+    }
+}
+
+
